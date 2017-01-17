@@ -120,9 +120,7 @@ class EventHandler(FileSystemEventHandler):
                 msg = "File is valid, sending for processing: %s" % event.src_path
                 logger.debug(msg)
                 self.write_log(event.src_path, msg)
-                tasks.uploadfile.delay(
-                    event.src_path, self.depositor, self._safe_mode
-                )
+                tasks.uploadfile.delay(event.src_path, self.depositor)
                 return None
 
             if self._safe_mode:  # skiping to remove data from FTP.
@@ -132,7 +130,8 @@ class EventHandler(FileSystemEventHandler):
                 return False
 
             os.remove(event.src_path)
-            msg = "File is not valid (%s), removed from server: %s" % (validation_message, event.src_path)
+            msg = "File is not valid (%s), removed from server: %s" % (
+                validation_message, event.src_path)
             logger.debug(msg)
             self.write_log(event.src_path, msg)
 

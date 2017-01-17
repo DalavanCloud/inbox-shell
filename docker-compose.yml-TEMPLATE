@@ -22,7 +22,7 @@ services:
             - /containers_host/ftp_conf:/etc/pureftpd
 
     monitor:
-        image: "scieloorg/penne-shell"
+        image: "scieloorg/inbox-shell"
         restart: always
         hostname: monitor
         networks:
@@ -40,6 +40,27 @@ services:
             - MONITORING_FOLDER=/home/ftpuser
         volumes:
             - /containers_host/ftp:/home/ftpuser
+
+    celeryworker:
+        image: "scieloorg/inbox-shell"
+        restart: always
+        hostname: celeryworker
+        networks:
+            - inbox-shell
+        links:
+            - rabbitmq:rabbitmq
+        depends_on:
+            - rabbitmq
+        environment:
+            - C_FORCE_ROOT=True
+            - SAFE_MODE=FALSE
+            - FRONTDESK_HOST=192.168.1.57
+            - MONITORING_FOLDER=/home/ftpuser
+            - LOGGING_LEVEL=DEBUG
+        volumes:
+            - /Users/fabiobatalha/Trabalho/inbox-shell/ftp:/home/ftpuser
+        command:
+            - celery -A inbox_shell.tasks worker -l DEBUG
 
     rabbitmq:
         image: rabbitmq

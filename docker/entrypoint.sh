@@ -1,5 +1,5 @@
 #!/bin/bash
 set -e
+cmd="$@"
 
-# inicia o webserver e o thrift server:
-/usr/bin/supervisord
+exec $cmd

@@ -18,15 +18,14 @@ fd = FrontDesk()
 
 
 @app.task
-def uploadfile(filename, depositor, safe_mode):
+def uploadfile(filename, depositor):
     logger.info('Scheduling file to be sent: %s', filename)
 
     try:
         fd.uploadfile(filename, depositor)
     except Exception:
         logger.exception(sys.exc_info()[0])
-
-    if safe_mode:  # skiping to remove files from server.
-        return
-
-    os.remove(filename)
+    finally:
+        if settings.SAFE_MODE:  # skiping to remove files from server.
+            return
+        os.remove(filename)

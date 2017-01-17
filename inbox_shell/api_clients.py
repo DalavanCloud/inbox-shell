@@ -37,11 +37,21 @@ class FrontDesk(object):
         }
         url = 'http://%s/%s' % (self._host, endpoint)
         try:
-            requests.post(
+            result = requests.post(
                 url,
                 data=params,
                 files=files
             )
+
+            if result.status_code not in [200, 300]:
+                raise RequestException(
+                    "Request fail: %s (%s) %d" % (
+                        url,
+                        str(files.update(params)),
+                        result.status_code
+                    )
+                )
+
             logger.info('File deposited: (%s)' % fl)
         except requests.exceptions.RequestException:
             logger.error('File could not be deposited: (%s)' % fl)
