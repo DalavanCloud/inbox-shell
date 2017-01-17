@@ -4,7 +4,6 @@ MAINTAINER tecnologia@scielo.org
 
 RUN apt-get update && apt-get install -y supervisor
 RUN mkdir -p /var/log/supervisor
-RUN apt-get install -y vsftpd ftp
 
 COPY . /app
 COPY requirements.txt /app/requirements.txt

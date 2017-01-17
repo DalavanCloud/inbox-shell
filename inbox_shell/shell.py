@@ -9,8 +9,8 @@ import os
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
-from penne_shell import tasks
-from penne_shell import settings
+from inbox_shell import tasks
+from inbox_shell import settings
 
 logger = logging.getLogger(__name__)
 

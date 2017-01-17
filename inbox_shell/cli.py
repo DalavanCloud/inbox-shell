@@ -4,8 +4,8 @@ import click
 import logging
 import logging.config
 
-from penne_shell.penne_shell import monitor
-from penne_shell import settings
+from inbox_shell.shell import monitor
+from inbox_shell import settings
 
 logger = logging.getLogger(__name__)
 
@@ -24,17 +24,17 @@ LOGGING = {
         }
     },
     'loggers': {
-        'penne_shell': {
+        'inbox_shell': {
             'handlers': ['console'],
-            'level': 'INFO'
+            'level': 'DEBUG'
         }
     }
 }
 
 
-def _config_logging(logging_level='INFO'):
+def _config_logging(logging_level='DEBUG'):
 
-    LOGGING['loggers']['penne_shell']['level'] = logging_level
+    LOGGING['loggers']['inbox_shell']['level'] = logging_level
 
     logging.config.dictConfig(LOGGING)
 
@@ -43,7 +43,7 @@ def _config_logging(logging_level='INFO'):
 @click.argument('monitored_path', default=settings.MONITORING_FOLDER)
 @click.option('--safe_mode', '-s', is_flag=True)
 @click.option(
-    '--logging_level', '-l', default='INFO',
+    '--logging_level', '-l', default=settings.LOGGING_LEVEL,
     type=click.Choice(['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'])
 )
 def main(monitored_path, safe_mode, logging_level):
@@ -52,6 +52,9 @@ def main(monitored_path, safe_mode, logging_level):
         safe_mode = True
 
     _config_logging(logging_level=logging_level)
+
+    logger.info("Running in safe mode: %s" % safe_mode)
+    logger.info("Logging level: %s" % settings.LOGGING_LEVEL)
     monitor(monitored_path, safe_mode=safe_mode)
 
 if __name__ == "__main__":
