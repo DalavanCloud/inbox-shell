@@ -16,10 +16,6 @@ app = Celery('tasks', broker=celery_broker)
 
 fd = FrontDesk()
 
-logger.info("Running in safe mode: %s" % settings.SAFE_MODE)
-logger.info("Logging level: %s" % settings.LOGGING_LEVEL)
-logger.info("FRONTDESK Deposit host: %s" % settings.FRONTDESK_HOST)
-
 
 @app.task
 def uploadfile(filename, depositor, safe_mode):
