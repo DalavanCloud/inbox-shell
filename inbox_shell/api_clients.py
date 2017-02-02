@@ -25,7 +25,6 @@ class FrontDesk(object):
 
     def uploadfile(self, fl, depositor='anonymous'):
         logger.info('Starting file deposit: (%s)' % fl)
-        endpoint = 'frontdesk/deposits/'
         flo = open(fl, 'rb')
         md5_sum = utils.safe_checksum_file(flo)
         files = {
@@ -35,7 +34,7 @@ class FrontDesk(object):
             'md5_sum': md5_sum,
             'depositor': depositor
         }
-        url = 'http://%s/%s' % (self._host, endpoint)
+        url = '%s/frontdesk/deposits/' % (self._host)
         try:
             result = requests.post(
                 url,

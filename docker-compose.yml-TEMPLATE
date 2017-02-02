@@ -40,6 +40,8 @@ services:
             - MONITORING_FOLDER=/home/ftpuser
         volumes:
             - /containers_host/ftp:/home/ftpuser
+        command:
+            - inbox_monitor /home/ftpuser
 
     celeryworker:
         image: "scieloorg/inbox-shell"
